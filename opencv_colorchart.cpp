@@ -1,11 +1,11 @@
 #include <opencv2/opencv.hpp>
-
-int create_mat_image(cv::Mat &image) {
-    const int width = image.cols;         // 画像の幅
-    const int height = image.rows;        // 画像の高さ
+//画像作成
+cv::Mat create_mat_image(int width, int height) {
     const int band_height = height / 12;  // 各色のバンドの高さ
     const int segment_width = width / 16; // 横方向の色の切り替わりポイント
     const int num_segments = 15;          // セグメントの総数
+
+    cv::Mat image(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
 
     // 各セグメントの色の値を事前に計算して配列に格納
     std::vector<uchar> segment_values(num_segments + 1);
@@ -53,14 +53,13 @@ int create_mat_image(cv::Mat &image) {
         }
     }
 
-    return 0;
+    return image;
 }
 
 int main() {
     const int width = 1280;
     const int height = 720;
-    cv::Mat image(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
-    create_mat_image(image);
+    cv::Mat image=create_mat_image(width,height);
 
     cv::imshow("Color Chart", image);
     cv::imwrite("out.jpg", image);
